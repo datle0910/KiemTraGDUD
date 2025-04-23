@@ -7,12 +7,14 @@ function TodoList() {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
 
+  // Lấy dữ liệu từ API
   useEffect(() => {
     axios.get(API_URL)
       .then(response => setTodos(response.data))
       .catch(error => console.error('Lỗi khi tải dữ liệu:', error));
   }, []);
 
+  // Thêm công việc mới
   const handleAdd = async () => {
     if (newTodo.trim() === '') return;
 
@@ -30,19 +32,38 @@ function TodoList() {
     }
   };
 
+  // Xoá công việc
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${API_URL}/${id}`); 
+      await axios.delete(`${API_URL}/${id}`);
       setTodos(todos.filter(todo => todo.id !== id));
     } catch (error) {
       console.error('Lỗi khi xoá công việc:', error);
     }
   };
-  
+
+  // Toggle hoàn thành công việc
+  const handleToggleComplete = async (id, currentStatus) => {
+    try {
+      const response = await axios.put(`${API_URL}/${id}`, {
+        completed: !currentStatus
+      });
+
+      setTodos(
+        todos.map(todo =>
+          todo.id === id ? { ...todo, completed: response.data.completed } : todo
+        )
+      );
+    } catch (error) {
+      console.error('Lỗi khi cập nhật trạng thái công việc:', error);
+    }
+  };
+
   return (
     <div style={{ padding: '20px' }}>
       <h1>📋 Danh sách công việc</h1>
 
+      {/* Form thêm công việc */}
       <div style={{ marginBottom: '10px' }}>
         <input
           type="text"
@@ -53,13 +74,20 @@ function TodoList() {
         <button onClick={handleAdd}>Thêm</button>
       </div>
 
+      {/* Danh sách công việc */}
       <ul>
         {todos.map(todo => (
           <li key={todo.id}>
-            <span>{todo.text}</span> - 
+            <input
+              type="checkbox"
+              checked={todo.completed}
+              onChange={() => handleToggleComplete(todo.id, todo.completed)}
+            />
+            <span style={{ marginLeft: '8px' }}>{todo.text}</span> - 
             <strong>{todo.completed ? 'Hoàn thành' : 'Chưa hoàn thành'}</strong>
-            <button onClick={() => handleDelete(todo.id)} style={{ marginLeft: '10px' }}>Xoá</button>
-
+            <button onClick={() => handleDelete(todo.id)} style={{ marginLeft: '10px' }}>
+              Xoá
+            </button>
           </li>
         ))}
       </ul>
