@@ -6,6 +6,7 @@ const API_URL = 'https://6808318f942707d722dd86b9.mockapi.io/todo';
 function TodoList() {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
+  const [filter, setFilter] = useState('all'); // all | completed | incomplete
 
   // Lấy dữ liệu từ API
   useEffect(() => {
@@ -59,6 +60,13 @@ function TodoList() {
     }
   };
 
+  // Lọc danh sách công việc
+  const filteredTodos = todos.filter(todo => {
+    if (filter === 'completed') return todo.completed;
+    if (filter === 'incomplete') return !todo.completed;
+    return true; // 'all'
+  });
+
   return (
     <div style={{ padding: '20px' }}>
       <h1>📋 Danh sách công việc</h1>
@@ -74,9 +82,22 @@ function TodoList() {
         <button onClick={handleAdd}>Thêm</button>
       </div>
 
+      {/* Bộ lọc công việc */}
+      <div style={{ marginBottom: '15px' }}>
+        <button onClick={() => setFilter('all')} style={{ marginRight: '8px' }}>
+          Tất cả
+        </button>
+        <button onClick={() => setFilter('completed')} style={{ marginRight: '8px' }}>
+          Đã hoàn thành
+        </button>
+        <button onClick={() => setFilter('incomplete')}>
+          Chưa hoàn thành
+        </button>
+      </div>
+
       {/* Danh sách công việc */}
       <ul>
-        {todos.map(todo => (
+        {filteredTodos.map(todo => (
           <li key={todo.id}>
             <input
               type="checkbox"
