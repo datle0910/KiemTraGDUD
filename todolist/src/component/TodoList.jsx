@@ -1,7 +1,7 @@
 // TodoList.js
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import TodoItem from './TodoItem';  // Import component TodoItem
+import TodoItem from './TodoItem';
 
 const API_URL = 'https://6808318f942707d722dd86b9.mockapi.io/todo';
 
@@ -87,36 +87,49 @@ function TodoList() {
   const completedTodos = todos.filter(todo => todo.completed).length;
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>📋 Danh sách công việc</h1>
+    <div className="max-w-4xl mx-auto p-5 bg-gray-100 rounded-lg shadow-lg">
+      <h1 className="text-3xl font-bold mb-6 text-center">📋 Danh sách công việc</h1>
 
       {/* Hiển thị tổng số công việc và số công việc hoàn thành */}
-      <div style={{ marginBottom: '15px' }}>
-        <p>
-          <strong>Tổng:</strong> {totalTodos} | <strong>Hoàn thành:</strong> {completedTodos}
-        </p>
+      <div className="text-lg mb-6">
+        <strong>Tổng:</strong> {totalTodos} | <strong>Hoàn thành:</strong> {completedTodos}
       </div>
 
       {/* Form thêm công việc */}
-      <div style={{ marginBottom: '10px' }}>
+      <div className="flex mb-6">
         <input
           type="text"
           value={newTodo}
           onChange={(e) => setNewTodo(e.target.value)}
           placeholder="Nhập công việc..."
+          className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        <button onClick={handleAdd}>Thêm</button>
+        <button
+          onClick={handleAdd}
+          className="ml-3 p-3 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+        >
+          Thêm
+        </button>
       </div>
 
       {/* Bộ lọc công việc */}
-      <div style={{ marginBottom: '15px' }}>
-        <button onClick={() => setFilter('all')} style={{ marginRight: '8px' }}>
+      <div className="mb-6 text-center">
+        <button 
+          onClick={() => setFilter('all')} 
+          className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 mx-2"
+        >
           Tất cả
         </button>
-        <button onClick={() => setFilter('completed')} style={{ marginRight: '8px' }}>
+        <button 
+          onClick={() => setFilter('completed')} 
+          className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 mx-2"
+        >
           Đã hoàn thành
         </button>
-        <button onClick={() => setFilter('incomplete')}>
+        <button 
+          onClick={() => setFilter('incomplete')} 
+          className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 mx-2"
+        >
           Chưa hoàn thành
         </button>
       </div>
