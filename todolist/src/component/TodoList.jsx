@@ -8,12 +8,25 @@ function TodoList() {
   const [newTodo, setNewTodo] = useState('');
   const [filter, setFilter] = useState('all'); // all | completed | incomplete
 
-  // Lấy dữ liệu từ API
+  // Lấy dữ liệu từ localStorage khi trang được tải lại
   useEffect(() => {
-    axios.get(API_URL)
-      .then(response => setTodos(response.data))
-      .catch(error => console.error('Lỗi khi tải dữ liệu:', error));
+    const storedTodos = localStorage.getItem('todos');
+    if (storedTodos) {
+      setTodos(JSON.parse(storedTodos));
+    } else {
+      // Nếu không có dữ liệu trong localStorage, lấy từ API
+      axios.get(API_URL)
+        .then(response => setTodos(response.data))
+        .catch(error => console.error('Lỗi khi tải dữ liệu từ API:', error));
+    }
   }, []);
+
+  // Lưu danh sách công việc vào localStorage mỗi khi todos thay đổi
+  useEffect(() => {
+    if (todos.length > 0) {
+      localStorage.setItem('todos', JSON.stringify(todos));
+    }
+  }, [todos]);
 
   // Thêm công việc mới
   const handleAdd = async () => {
