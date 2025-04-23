@@ -1,5 +1,7 @@
+// TodoList.js
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import TodoItem from './TodoItem';  // Import component TodoItem
 
 const API_URL = 'https://6808318f942707d722dd86b9.mockapi.io/todo';
 
@@ -122,18 +124,12 @@ function TodoList() {
       {/* Danh sách công việc */}
       <ul>
         {filteredTodos.map(todo => (
-          <li key={todo.id}>
-            <input
-              type="checkbox"
-              checked={todo.completed}
-              onChange={() => handleToggleComplete(todo.id, todo.completed)}
-            />
-            <span style={{ marginLeft: '8px' }}>{todo.text}</span> - 
-            <strong>{todo.completed ? 'Hoàn thành' : 'Chưa hoàn thành'}</strong>
-            <button onClick={() => handleDelete(todo.id)} style={{ marginLeft: '10px' }}>
-              Xoá
-            </button>
-          </li>
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            onToggleComplete={handleToggleComplete}
+            onDelete={handleDelete}
+          />
         ))}
       </ul>
     </div>
