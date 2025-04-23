@@ -30,10 +30,15 @@ function TodoList() {
     }
   };
 
-  const handleDelete = (id) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${API_URL}/${id}`); 
+      setTodos(todos.filter(todo => todo.id !== id));
+    } catch (error) {
+      console.error('Lỗi khi xoá công việc:', error);
+    }
   };
-
+  
   return (
     <div style={{ padding: '20px' }}>
       <h1>📋 Danh sách công việc</h1>
@@ -54,6 +59,7 @@ function TodoList() {
             <span>{todo.text}</span> - 
             <strong>{todo.completed ? 'Hoàn thành' : 'Chưa hoàn thành'}</strong>
             <button onClick={() => handleDelete(todo.id)} style={{ marginLeft: '10px' }}>Xoá</button>
+
           </li>
         ))}
       </ul>
