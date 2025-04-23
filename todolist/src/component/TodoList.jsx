@@ -67,9 +67,20 @@ function TodoList() {
     return true; // 'all'
   });
 
+  // Tính tổng số công việc và số công việc hoàn thành
+  const totalTodos = todos.length;
+  const completedTodos = todos.filter(todo => todo.completed).length;
+
   return (
     <div style={{ padding: '20px' }}>
       <h1>📋 Danh sách công việc</h1>
+
+      {/* Hiển thị tổng số công việc và số công việc hoàn thành */}
+      <div style={{ marginBottom: '15px' }}>
+        <p>
+          <strong>Tổng:</strong> {totalTodos} | <strong>Hoàn thành:</strong> {completedTodos}
+        </p>
+      </div>
 
       {/* Form thêm công việc */}
       <div style={{ marginBottom: '10px' }}>
